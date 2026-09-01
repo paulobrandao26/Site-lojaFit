@@ -20,7 +20,7 @@ export function Checkout() {
   })
   const [enviando, setEnviando] = useState(false)
   const [erro, setErro] = useState(false)
-  const [pedidoId, setPedidoId] = useState<string | null>(null)
+  const [pedidoId, _setPedidoId] = useState<string | null>(null)
 
   function handleChange(campo: string, valor: string) {
     setEndereco((atual) => ({ ...atual, [campo]: valor }))
