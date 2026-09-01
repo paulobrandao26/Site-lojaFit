@@ -1,17 +1,18 @@
-import { Header } from './components/Header'
-import { Footer } from './components/Footer'
-import { AppRoutes } from './routes/AppRoutes'
-import { CarrinhoProvider } from './context/CarrinhoContext'
-import { TemaProvider } from './context/TemaContext'
+import { Header } from './components/Header';
+import { AuthProvider } from './context/AuthContext';
+import { CarrinhoProvider } from './context/CarrinhoContext';
+import { TemaProvider } from './context/TemaContext';
+import { AppRoutes } from './routes/AppRoutes';
 
 function App() {
   return (
     <TemaProvider>
-      <CarrinhoProvider>
-        <Header />
-        <AppRoutes />
-        <Footer />
-      </CarrinhoProvider>
+      <AuthProvider>
+        <CarrinhoProvider>
+          <Header />
+          <AppRoutes />
+        </CarrinhoProvider>
+      </AuthProvider>
     </TemaProvider>
   )
 }

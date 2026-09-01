@@ -5,6 +5,7 @@ import { ProdutoDetalhe } from '../pages/ProdutoDetalhe'
 import { Carrinho } from '../pages/Carrinho'
 import { Checkout } from '../pages/Checkout'
 import { Afiliados } from '../pages/Afiliados'
+import { PedidoConfirmado } from '../pages/PedidoConfirmado'
 
 export function AppRoutes() {
   return (
@@ -15,6 +16,7 @@ export function AppRoutes() {
       <Route path="/carrinho" element={<Carrinho />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/afiliados" element={<Afiliados />} />
+      <Route path="/pedido-confirmado" element={<PedidoConfirmado />} />
     </Routes>
   )
 }

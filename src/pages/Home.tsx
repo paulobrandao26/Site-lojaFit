@@ -1,14 +1,28 @@
-import { produtos } from '../data/produtos'
-import { ProductCard } from '../components/ProductCard'
-import type { Produto } from '../types'
-import { useCarrinho } from '../context/CarrinhoContext'
+import { useEffect, useState } from 'react';
+import { ProductCarousel } from '../components/ProductCarousel';
+import { useCarrinho } from '../context/CarrinhoContext';
+import { buscarProdutos } from '../data/api';
+import type { Produto } from '../types';
 
 export function Home() {
   const { adicionarItem } = useCarrinho()
+  const [produtos, setProdutos] = useState<Produto[]>([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState(false)
+
+  useEffect(() => {
+    buscarProdutos()
+      .then((dados) => setProdutos(dados))
+      .catch(() => setErro(true))
+      .finally(() => setCarregando(false))
+  }, [])
 
   function handleAdicionarCarrinho(produto: Produto) {
     adicionarItem(produto)
   }
+
+  const maisVendidos = produtos.filter((p) => p.avaliacao && p.avaliacao >= 4.5)
+  const emPromocao = produtos.filter((p) => p.precoPromocional !== undefined && p.precoPromocional !== null)
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300">
@@ -25,22 +39,33 @@ export function Home() {
         </button>
       </section>
 
-      {/* Grid de produtos */}
-      <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="mb-8 text-2xl font-bold text-neutral-900 dark:text-white">
-          Mais vendidos
-        </h2>
+      {carregando && (
+        <p className="py-16 text-center text-neutral-500 dark:text-neutral-400">Carregando produtos...</p>
+      )}
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {produtos.map((produto) => (
-            <ProductCard
-              key={produto.id}
-              produto={produto}
+      {erro && (
+        <p className="py-16 text-center text-red-500">
+          Não foi possível carregar os produtos. Verifique se o backend está rodando.
+        </p>
+      )}
+
+      {!carregando && !erro && (
+        <>
+          <ProductCarousel
+            titulo="Mais vendidos"
+            produtos={maisVendidos}
+            aoAdicionarCarrinho={handleAdicionarCarrinho}
+          />
+
+          {emPromocao.length > 0 && (
+            <ProductCarousel
+              titulo="Ofertas do dia"
+              produtos={emPromocao}
               aoAdicionarCarrinho={handleAdicionarCarrinho}
             />
-          ))}
-        </div>
-      </section>
+          )}
+        </>
+      )}
     </div>
   )
 }

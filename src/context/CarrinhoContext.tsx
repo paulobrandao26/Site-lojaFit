@@ -1,11 +1,12 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
-import type { Produto, ItemCarrinho } from '../types'
+import { createContext, useContext, useState, type ReactNode } from 'react';
+import type { ItemCarrinho, Produto } from '../types';
 
 interface CarrinhoContextType {
   itens: ItemCarrinho[]
   adicionarItem: (produto: Produto) => void
   removerItem: (produtoId: string) => void
   alterarQuantidade: (produtoId: string, quantidade: number) => void
+  limparCarrinho: () => void
   totalItens: number
   totalPreco: number
 }
@@ -35,6 +36,10 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
     setItens((itensAtuais) => itensAtuais.filter((item) => item.produto.id !== produtoId))
   }
 
+  function limparCarrinho() {
+    setItens([])
+  }
+
   function alterarQuantidade(produtoId: string, quantidade: number) {
     if (quantidade <= 0) {
       removerItem(produtoId)
@@ -56,7 +61,7 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
 
   return (
     <CarrinhoContext.Provider
-      value={{ itens, adicionarItem, removerItem, alterarQuantidade, totalItens, totalPreco }}
+      value={{ itens, adicionarItem, removerItem, alterarQuantidade, limparCarrinho, totalItens, totalPreco }}
     >
       {children}
     </CarrinhoContext.Provider>

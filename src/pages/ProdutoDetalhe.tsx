@@ -1,11 +1,25 @@
-import { useParams } from 'react-router-dom'
-import { produtos } from '../data/produtos'
-import { useCarrinho } from '../context/CarrinhoContext'
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useCarrinho } from '../context/CarrinhoContext';
+import { buscarProdutoPorId } from '../data/api';
+import type { Produto } from '../types';
 
 export function ProdutoDetalhe() {
   const { id } = useParams()
-  const produto = produtos.find((p) => p.id === id)
   const { adicionarItem } = useCarrinho()
+  const [produto, setProduto] = useState<Produto | null>(null)
+  const [carregando, setCarregando] = useState(true)
+
+  useEffect(() => {
+    if (!id) return
+    buscarProdutoPorId(id)
+      .then((dados) => setProduto(dados))
+      .finally(() => setCarregando(false))
+  }, [id])
+
+  if (carregando) {
+    return <p className="p-10 text-center text-neutral-900 dark:text-white">Carregando...</p>
+  }
 
   if (!produto) {
     return <p className="p-10 text-center text-neutral-900 dark:text-white">Produto não encontrado.</p>
