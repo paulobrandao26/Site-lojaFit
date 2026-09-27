@@ -1,6 +1,6 @@
 import type { Produto } from '../types';
 
-const API_URL = 'https://loja-fit-backend.onrender.com'
+const API_URL = 'https://loja-fit-worker.paulobrandaohbb.workers.dev'
 
 export async function buscarProdutos(): Promise<Produto[]> {
   const resposta = await fetch(`${API_URL}/produtos`)
