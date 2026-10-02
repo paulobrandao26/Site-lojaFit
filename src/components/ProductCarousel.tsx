@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect, useCallback } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { ProductCard } from './ProductCard'
-import type { Produto } from '../types'
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { Produto } from '../types';
+import { ProductRevealCard } from './ui/ProductRevealCard';
 
 interface ProductCarouselProps {
   titulo: string
@@ -31,7 +31,6 @@ export function ProductCarousel({ titulo, produtos, aoAdicionarCarrinho }: Produ
     }
   }
 
-  // Atualiza qual bolinha fica ativa conforme o usuário rola manualmente
   const handleScroll = useCallback(() => {
     if (!scrollRef.current) return
     const { scrollLeft, children } = scrollRef.current
@@ -50,7 +49,6 @@ export function ProductCarousel({ titulo, produtos, aoAdicionarCarrinho }: Produ
     setIndiceAtivo(maisProximo)
   }, [])
 
-  // Autoplay: avança um produto a cada 4s, pausa se o mouse estiver em cima
   useEffect(() => {
     if (pausado || produtos.length <= 1) return
 
@@ -87,21 +85,11 @@ export function ProductCarousel({ titulo, produtos, aoAdicionarCarrinho }: Produ
         </div>
       </div>
 
-      {/* Wrapper com fade nas bordas */}
       <div
         className="relative"
         onMouseEnter={() => setPausado(true)}
         onMouseLeave={() => setPausado(false)}
       >
-        <div
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-neutral-50 to-transparent dark:from-neutral-950 sm:w-16"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-neutral-50 to-transparent dark:from-neutral-950 sm:w-16"
-          aria-hidden
-        />
-
         <div
           ref={scrollRef}
           onScroll={handleScroll}
@@ -112,13 +100,12 @@ export function ProductCarousel({ titulo, produtos, aoAdicionarCarrinho }: Produ
               key={produto.id}
               className="w-[calc(50%-0.5rem)] flex-shrink-0 snap-start sm:w-[calc(33.333%-0.7rem)] lg:w-[calc(25%-0.75rem)]"
             >
-              <ProductCard produto={produto} aoAdicionarCarrinho={aoAdicionarCarrinho} />
+              <ProductRevealCard produto={produto} aoAdicionarCarrinho={aoAdicionarCarrinho} />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Indicadores (bolinhas) */}
       {produtos.length > 1 && (
         <div className="mt-4 flex justify-center gap-1.5">
           {produtos.map((_, i) => (

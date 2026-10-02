@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ProductCard } from '../components/ProductCard';
+import { ProductRevealCard } from '../components/ui/ProductRevealCard';
 import { useCarrinho } from '../context/CarrinhoContext';
 import { buscarProdutos } from '../data/api';
 import type { Produto } from '../types';
@@ -31,7 +31,7 @@ export function Produtos() {
         ) : (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {produtos.map((produto) => (
-              <ProductCard
+              <ProductRevealCard
                 key={produto.id}
                 produto={produto}
                 aoAdicionarCarrinho={handleAdicionarCarrinho}
