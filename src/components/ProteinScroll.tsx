@@ -57,7 +57,7 @@ export function ProteinScroll({ produtos, aoAdicionarCarrinho }: Props) {
           <div id="protein-pot-wrap" className="relative z-10 w-full max-w-md">
             <img
               id="protein-pin-img"
-              src="/whaypng.png"
+              src="/whayproteinpng.png"
               alt="Pote de whey girando no scroll"
               className="mx-auto max-h-[420px] w-auto object-contain will-change-transform"
             />
