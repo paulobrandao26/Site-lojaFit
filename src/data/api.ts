@@ -2,12 +2,30 @@ import type { Produto } from '../types';
 
 const API_URL = 'https://loja-fit-worker.paulobrandaohbb.workers.dev'
 
+function comImagemLocal(produto: Produto): Produto {
+  const nome = produto.nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  if (nome.includes('whey') || nome.includes('whay'))
+    return { ...produto, imagem: '/whayprod.jpg' }
+  if (nome.includes('creatina'))
+    return { ...produto, imagem: '/creatinaprod.jpg' }
+  if (nome.includes('elast'))
+    return { ...produto, imagem: '/elasticoprod.jpg' }
+  if (nome.includes('camis') || nome.includes('dry'))
+    return { ...produto, imagem: '/camisaprod.jpg' }
+  if (nome.includes('coquet'))
+    return { ...produto, imagem: '/coqueteira.jpg' }
+  if (nome.includes('tenis') || nome.includes('sapato') || nome.includes('calcado'))
+    return { ...produto, imagem: '/sapato.jpg' }
+  return produto
+}
+
 export async function buscarProdutos(): Promise<Produto[]> {
   const resposta = await fetch(`${API_URL}/produtos`)
   if (!resposta.ok) {
     throw new Error('Erro ao buscar produtos')
   }
-  return resposta.json()
+  const dados = await resposta.json()
+  return (dados as Produto[]).map(comImagemLocal)
 }
 
 export async function buscarProdutoPorId(id: string): Promise<Produto | null> {
@@ -15,9 +33,9 @@ export async function buscarProdutoPorId(id: string): Promise<Produto | null> {
   if (!resposta.ok) {
     return null
   }
-  return resposta.json()
+  const dados = await resposta.json()
+  return comImagemLocal(dados as Produto)
 }
-
 interface ItemPedidoPayload {
   produtoId: string
   nomeProduto: string

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCarrinho } from '../context/CarrinhoContext';
 import { buscarProdutoPorId } from '../data/api';
+import { AddToCartButton } from '../components/AddToCartButton'
 import type { Produto } from '../types';
 
 export function ProdutoDetalhe() {
@@ -40,12 +41,9 @@ export function ProdutoDetalhe() {
             <p className="mt-6 text-3xl font-bold text-neutral-900 dark:text-white">
               R$ {(produto.precoPromocional ?? produto.preco).toFixed(2)}
             </p>
-            <button
-              onClick={() => adicionarItem(produto)}
-              className="mt-6 rounded-full bg-neutral-900 px-8 py-3 font-bold text-white transition-colors hover:bg-lime-400 hover:text-neutral-900 dark:bg-lime-500 dark:text-neutral-900 dark:hover:bg-lime-400"
-            >
-              Adicionar ao carrinho
-            </button>
+            <div className="mt-6">
+               <AddToCartButton onClick={() => adicionarItem(produto)} />
+            </div>
           </div>
         </div>
       </div>

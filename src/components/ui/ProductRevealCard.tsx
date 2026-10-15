@@ -10,12 +10,13 @@ interface Props {
   aoAdicionarCarrinho?: (p: Produto) => void;
   aoFavoritar?: (p: Produto) => void;
   enableAnimations?: boolean;
+  botaoFixo?: boolean;
   className?: string;
 }
 
 const fmt = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
-export function ProductRevealCard({ produto, aoAdicionarCarrinho, aoFavoritar, enableAnimations = true, className }: Props) {
+export function ProductRevealCard({ produto, aoAdicionarCarrinho, aoFavoritar, enableAnimations = true, botaoFixo = false, className }: Props) {
   const [fav, setFav] = useState(false);
   const reduce = useReducedMotion();
   const anim = enableAnimations && !reduce;
@@ -23,10 +24,6 @@ export function ProductRevealCard({ produto, aoAdicionarCarrinho, aoFavoritar, e
   const box: Variants = {
     rest: { scale: 1, y: 0 },
     hover: anim ? { scale: 1.03, y: -8, transition: { type: "spring", stiffness: 300, damping: 30 } } : {},
-  };
-  const overlay: Variants = {
-    rest: { y: "100%", opacity: 0 },
-    hover: { y: "0%", opacity: 1, transition: { type: "spring", stiffness: 400, damping: 28 } },
   };
 
   const temPromo = produto.precoPromocional !== undefined;
@@ -50,7 +47,7 @@ export function ProductRevealCard({ produto, aoAdicionarCarrinho, aoFavoritar, e
             fav ? "bg-red-500 text-white" : "bg-white/20 text-white hover:bg-white/30")}>
           <Heart className={cn("h-4 w-4", fav && "fill-current")} />
         </button>
-        <motion.div variants={overlay} className="absolute inset-x-0 bottom-0 bg-neutral-950/85 p-4 backdrop-blur-sm">
+        <div className={botaoFixo ? "absolute inset-x-0 bottom-0 bg-neutral-950/85 p-4 backdrop-blur-sm" : "absolute inset-x-0 bottom-0 translate-y-full bg-neutral-950/85 p-4 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"}>
           <p className="line-clamp-2 text-sm text-white/90">{produto.descricao}</p>
           <div className="mt-3 flex gap-2">
             <button
@@ -59,7 +56,7 @@ export function ProductRevealCard({ produto, aoAdicionarCarrinho, aoFavoritar, e
               <ShoppingCart className="h-4 w-4" /> Adicionar
             </button>
           </div>
-        </motion.div>
+        </div>
       </div>
       <div className="flex flex-col gap-1 p-4">
         <span className="text-xs uppercase tracking-wide text-neutral-400">{produto.categoria}</span>
