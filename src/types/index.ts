@@ -3,11 +3,11 @@ export interface Produto {
   nome: string
   descricao: string
   preco: number
-  precoPromocional?: number
+  precoPromocional?: number | null
   imagem: string
   categoria: string
   estoque: number
-  avaliacao?: number
+  avaliacao?: number | null
 }
 
 export interface ItemCarrinho {

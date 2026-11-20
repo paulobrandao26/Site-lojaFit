@@ -1,20 +1,20 @@
+import { Lock, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react'
+import { Etapas } from '../components/Etapas'
 import { useCarrinho } from '../context/CarrinhoContext'
 
+const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
+
 export function Carrinho() {
-  const { itens, removerItem, alterarQuantidade, totalPreco } = useCarrinho()
+  const { itens, removerItem, alterarQuantidade, totalPreco, totalItens } = useCarrinho()
 
   if (itens.length === 0) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 bg-neutral-50 px-6 text-center dark:bg-neutral-950">
-        <ShoppingBag className="h-16 w-16 text-neutral-300 dark:text-neutral-700" />
-        <h1 className="text-xl font-bold text-neutral-900 dark:text-white">Seu carrinho está vazio</h1>
-        <p className="text-neutral-500 dark:text-neutral-400">Adicione produtos para vê-los aqui.</p>
-        <Link
-          to="/produtos"
-          className="mt-2 rounded-full bg-neutral-900 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-lime-400 hover:text-neutral-900 dark:bg-lime-500 dark:text-neutral-900 dark:hover:bg-lime-400"
-        >
+      <div className="flex min-h-[70vh] flex-col items-center justify-center gap-4 bg-ground px-6 text-center">
+        <ShoppingBag className="h-14 w-14 text-muted" />
+        <h1 className="font-display text-2xl text-ink">Seu carrinho está vazio</h1>
+        <p className="text-muted">Escolha um produto para começar.</p>
+        <Link to="/produtos" className="mt-2 rounded-lg bg-plate px-8 py-4 font-bold text-onplate hover:bg-plate-dark">
           Ver produtos
         </Link>
       </div>
@@ -22,77 +22,74 @@ export function Carrinho() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300">
-      <div className="mx-auto max-w-4xl px-6 py-16">
-        <h1 className="mb-8 text-2xl font-bold text-neutral-900 dark:text-white">Seu carrinho</h1>
+    <div className="min-h-screen bg-ground pb-36 lg:pb-16">
+      <div className="mx-auto max-w-5xl px-6 py-10">
+        <Etapas atual={1} />
+        <h1 className="font-display mb-6 text-4xl text-ink">Seu carrinho</h1>
 
-        <div className="flex flex-col gap-4">
-          {itens.map((item) => {
-            const preco = item.produto.precoPromocional ?? item.produto.preco
+        <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
+          <ul className="flex flex-col divide-y divide-line rounded-xl bg-surface">
+            {itens.map((item) => {
+              const preco = item.produto.precoPromocional ?? item.produto.preco
+              return (
+                <li key={item.produto.id} className="flex flex-wrap items-center gap-4 p-4">
+                  <img src={item.produto.imagem} alt="" className="h-20 w-20 rounded-lg bg-line object-cover" />
 
-            return (
-              <div
-                key={item.produto.id}
-                className="flex items-center gap-4 rounded-2xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900"
-              >
-                <img
-                  src={item.produto.imagem}
-                  alt={item.produto.nome}
-                  className="h-20 w-20 rounded-xl bg-neutral-100 object-cover dark:bg-neutral-800"
-                />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-ink">{item.produto.nome}</h3>
+                    <span className="text-sm text-muted">{fmt.format(preco)} cada</span>
+                  </div>
 
-                <div className="flex flex-1 flex-col gap-1">
-                  <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
-                    {item.produto.nome}
-                  </h3>
-                  <span className="text-sm font-bold text-neutral-900 dark:text-white">
-                    R$ {preco.toFixed(2)}
-                  </span>
-                </div>
+                  <div className="flex items-center rounded-full border border-line">
+                    <button
+                      onClick={() => alterarQuantidade(item.produto.id, item.quantidade - 1)}
+                      disabled={item.quantidade <= 1}
+                      className="grid h-11 w-11 place-items-center rounded-full text-ink hover:bg-line/60 disabled:opacity-30"
+                      aria-label={`Diminuir quantidade de ${item.produto.nome}`}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <span className="w-8 text-center font-semibold text-ink" aria-live="polite">{item.quantidade}</span>
+                    <button
+                      onClick={() => alterarQuantidade(item.produto.id, item.quantidade + 1)}
+                      disabled={item.quantidade >= item.produto.estoque}
+                      className="grid h-11 w-11 place-items-center rounded-full text-ink hover:bg-line/60 disabled:opacity-30"
+                      aria-label={`Aumentar quantidade de ${item.produto.nome}`}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
 
-                <div className="flex items-center gap-2 rounded-full border border-neutral-200 px-2 py-1 dark:border-neutral-700">
+                  <strong className="w-24 text-right text-ink">{fmt.format(preco * item.quantidade)}</strong>
+
                   <button
-                    onClick={() => alterarQuantidade(item.produto.id, item.quantidade - 1)}
-                    className="flex h-7 w-7 items-center justify-center rounded-full text-neutral-900 transition-colors hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
-                    aria-label="Diminuir quantidade"
+                    onClick={() => removerItem(item.produto.id)}
+                    className="grid h-11 w-11 place-items-center rounded-full text-muted hover:bg-danger/10 hover:text-danger"
+                    aria-label={`Remover ${item.produto.nome}`}
                   >
-                    <Minus className="h-3.5 w-3.5" />
+                    <Trash2 className="h-4 w-4" />
                   </button>
-                  <span className="w-6 text-center text-sm font-medium text-neutral-900 dark:text-white">
-                    {item.quantidade}
-                  </span>
-                  <button
-                    onClick={() => alterarQuantidade(item.produto.id, item.quantidade + 1)}
-                    className="flex h-7 w-7 items-center justify-center rounded-full text-neutral-900 transition-colors hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
-                    aria-label="Aumentar quantidade"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                  </button>
-                </div>
+                </li>
+              )
+            })}
+          </ul>
 
-                <button
-                  onClick={() => removerItem(item.produto.id)}
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:text-neutral-500 dark:hover:bg-red-950 dark:hover:text-red-400"
-                  aria-label="Remover item"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-            )
-          })}
-        </div>
-
-        <div className="mt-8 flex flex-col items-end gap-4 border-t border-neutral-200 pt-6 dark:border-neutral-800">
-          <div className="flex items-center gap-3 text-lg">
-            <span className="text-neutral-500 dark:text-neutral-400">Total:</span>
-            <span className="font-bold text-neutral-900 dark:text-white">R$ {totalPreco.toFixed(2)}</span>
-          </div>
-          <Link
-            to="/checkout"
-            className="rounded-full bg-neutral-900 px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-lime-400 hover:text-neutral-900 dark:bg-lime-500 dark:text-neutral-900 dark:hover:bg-lime-400"
-          >
-            Finalizar compra
-          </Link>
+          {/* Resumo: no celular fica preso embaixo, perto do dedo */}
+          <aside className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-ground p-4 lg:static lg:self-start lg:rounded-xl lg:border-0 lg:bg-surface lg:p-6">
+            <div className="flex items-baseline justify-between">
+              <span className="text-muted">Total ({totalItens} {totalItens === 1 ? 'item' : 'itens'})</span>
+              <strong className="text-2xl font-black text-ink">{fmt.format(totalPreco)}</strong>
+            </div>
+            <Link
+              to="/checkout"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-plate py-4 font-bold text-onplate hover:bg-plate-dark"
+            >
+              <Lock className="h-4 w-4" /> Continuar para entrega
+            </Link>
+            <Link to="/produtos" className="mt-3 hidden text-center text-sm text-muted underline hover:text-ink lg:block">
+              Continuar comprando
+            </Link>
+          </aside>
         </div>
       </div>
     </div>

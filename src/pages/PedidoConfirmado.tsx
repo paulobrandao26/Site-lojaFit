@@ -1,36 +1,57 @@
+import { motion, useReducedMotion } from 'framer-motion';
+import { Check, Mail } from 'lucide-react';
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useCarrinho } from '../context/CarrinhoContext';
 
+// Fim do fluxo caprichado: é a última impressão da compra
 export function PedidoConfirmado() {
   const [searchParams] = useSearchParams()
   const pedidoId = searchParams.get('pedidoId')
-  const navigate = useNavigate()
   const { limparCarrinho } = useCarrinho()
+  const reduce = useReducedMotion()
 
   useEffect(() => {
     limparCarrinho()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <div className="mx-auto flex min-h-[70vh] max-w-md flex-col items-center justify-center gap-4 px-6 text-center">
-      <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
-        Pagamento confirmado! 🎉
-      </h1>
-      <p className="text-neutral-600 dark:text-neutral-400">
-        Seu pedido foi pago com sucesso (ambiente de teste).
-      </p>
-      {pedidoId && (
-        <p className="rounded-xl bg-neutral-100 px-4 py-2 font-mono text-xs text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
-          Pedido: {pedidoId}
+    <div className="flex min-h-screen items-center justify-center bg-ground px-6 py-16">
+      <div className="w-full max-w-md text-center">
+        <motion.div
+          initial={reduce ? false : { scale: 0.4, rotate: -90 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: 'spring', stiffness: 220, damping: 16 }}
+          className="mx-auto grid h-24 w-24 place-items-center rounded-full bg-plate-green"
+        >
+          <Check className="h-12 w-12 text-white" strokeWidth={3} />
+        </motion.div>
+
+        <h1 className="font-display mt-6 text-4xl text-ink">Pedido confirmado</h1>
+        <p className="mt-3 text-muted">Pagamento aprovado. Agora é com a gente: vamos separar seus produtos.</p>
+
+        {pedidoId && (
+          <div className="mt-6 rounded-xl bg-surface p-4">
+            <p className="text-sm text-muted">Número do pedido</p>
+            <p className="font-display mt-1 text-xl text-ink">#{pedidoId.slice(0, 8).toUpperCase()}</p>
+          </div>
+        )}
+
+        <p className="mt-4 flex items-center justify-center gap-2 text-sm text-muted">
+          <Mail className="h-4 w-4" /> Guarde este número para acompanhar o pedido.
         </p>
-      )}
-      <button
-        onClick={() => navigate('/produtos')}
-        className="mt-4 rounded-full bg-neutral-900 px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-lime-400 hover:text-neutral-900 dark:bg-lime-500 dark:text-neutral-900 dark:hover:bg-lime-400"
-      >
-        Continuar comprando
-      </button>
+
+        <Link
+          to="/produtos"
+          className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-plate py-4 font-bold text-onplate hover:bg-plate-dark"
+        >
+          Continuar comprando
+        </Link>
+        <Link to="/" className="mt-3 inline-block text-sm text-muted underline hover:text-ink">
+          Voltar ao início
+        </Link>
+      </div>
     </div>
   )
 }

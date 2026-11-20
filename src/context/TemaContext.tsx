@@ -11,7 +11,8 @@ const TemaContext = createContext<TemaContextType | undefined>(undefined)
 
 export function TemaProvider({ children }: { children: ReactNode }) {
   const [tema, setTema] = useState<Tema>(() => {
-    const salvo = localStorage.getItem('tema')
+    let salvo: string | null = null
+    try { salvo = localStorage.getItem('tema-v3') } catch { /* sem storage */ }
     return (salvo as Tema) ?? 'claro'
   })
 
@@ -22,7 +23,10 @@ export function TemaProvider({ children }: { children: ReactNode }) {
     } else {
       root.classList.remove('dark')
     }
-    localStorage.setItem('tema', tema)
+    // Barra de rolagem, campos e cor do navegador seguem o tema
+    root.style.colorScheme = tema === 'escuro' ? 'dark' : 'light'
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', tema === 'escuro' ? '#111111' : '#ffffff')
+    try { localStorage.setItem('tema-v3', tema) } catch { /* sem storage */ }
   }, [tema])
 
   function alternarTema() {

@@ -1,4 +1,5 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useReducedMotion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Produto } from '../types';
 import { ProductRevealCard } from './ui/ProductRevealCard';
@@ -13,6 +14,8 @@ export function ProductCarousel({ titulo, produtos, aoAdicionarCarrinho }: Produ
   const scrollRef = useRef<HTMLDivElement>(null)
   const [indiceAtivo, setIndiceAtivo] = useState(0)
   const [pausado, setPausado] = useState(false)
+  const [parado, setParado] = useState(false)
+  const reduce = useReducedMotion()
 
   function rolar(direcao: 'esquerda' | 'direita') {
     if (!scrollRef.current) return
@@ -49,8 +52,9 @@ export function ProductCarousel({ titulo, produtos, aoAdicionarCarrinho }: Produ
     setIndiceAtivo(maisProximo)
   }, [])
 
+  // Passa sozinho só se ninguém pausou e o sistema não pede menos movimento
   useEffect(() => {
-    if (pausado || produtos.length <= 1) return
+    if (pausado || parado || reduce || produtos.length <= 1) return
 
     const intervalo = setInterval(() => {
       const proximo = (indiceAtivo + 1) % produtos.length
@@ -58,26 +62,36 @@ export function ProductCarousel({ titulo, produtos, aoAdicionarCarrinho }: Produ
     }, 4000)
 
     return () => clearInterval(intervalo)
-  }, [indiceAtivo, pausado, produtos.length])
+  }, [indiceAtivo, pausado, parado, reduce, produtos.length])
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16">
+    <section className="mx-auto max-w-[1200px] px-6 py-24">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
+        <h2 className="font-display text-balance text-4xl text-ink">
           {titulo}
         </h2>
 
         <div className="flex gap-2">
+          {!reduce && produtos.length > 1 && (
+            <button
+              onClick={() => setParado((p) => !p)}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink transition-[background-color,border-color,color] hover:border-plate"
+              aria-label={parado ? 'Voltar a passar os produtos sozinho' : 'Parar de passar os produtos sozinho'}
+              aria-pressed={parado}
+            >
+              {parado ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+            </button>
+          )}
           <button
             onClick={() => rolar('esquerda')}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-900 transition-all hover:scale-110 hover:bg-lime-400 hover:border-lime-400 hover:text-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-lime-500"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink transition-[background-color,border-color,color,transform] hover:scale-110 hover:bg-plate hover:border-plate hover:text-onplate"
             aria-label="Rolar para esquerda"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={() => rolar('direita')}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-900 transition-all hover:scale-110 hover:bg-lime-400 hover:border-lime-400 hover:text-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-lime-500"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink transition-[background-color,border-color,color,transform] hover:scale-110 hover:bg-plate hover:border-plate hover:text-onplate"
             aria-label="Rolar para direita"
           >
             <ChevronRight className="h-4 w-4" />
@@ -89,6 +103,8 @@ export function ProductCarousel({ titulo, produtos, aoAdicionarCarrinho }: Produ
         className="relative"
         onMouseEnter={() => setPausado(true)}
         onMouseLeave={() => setPausado(false)}
+        onFocus={() => setPausado(true)}
+        onBlur={() => setPausado(false)}
       >
         <div
           ref={scrollRef}
@@ -112,10 +128,10 @@ export function ProductCarousel({ titulo, produtos, aoAdicionarCarrinho }: Produ
             <button
               key={i}
               onClick={() => irParaIndice(i)}
-              className={`h-1.5 rounded-full transition-all ${
+              className={`h-1.5 rounded-full transition-[width,background-color] ${
                 i === indiceAtivo
-                  ? 'w-6 bg-lime-500'
-                  : 'w-1.5 bg-neutral-300 dark:bg-neutral-700'
+                  ? 'w-6 bg-plate'
+                  : 'w-1.5 bg-line'
               }`}
               aria-label={`Ir para produto ${i + 1}`}
             />

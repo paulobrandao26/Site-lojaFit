@@ -2,6 +2,100 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Vitrine fitness limpa — ver DESIGN.md */
+:root {
+  --ground: #ffffff;
+  --surface: #f4f4f2;
+  --ink: #111111;
+  --muted: #6b6b6b;
+  --line: #e6e6e3;
+  --plate: #111111;       /* botão principal */
+  --plate-dark: #333333;
+  --onplate: #ffffff;
+  --sale: #c2410c;        /* desconto */
+  --amber: #b45309;
+  --danger: #b42318;
+  --dark: #111111;
+  --dark-2: #1b1b1b;
+  --on-dark: #f4f4f2;
+  --on-dark-soft: #a3a3a3;
+}
+
+.dark {
+  --ground: #111111;
+  --surface: #1b1b1b;
+  --ink: #f4f4f2;
+  --muted: #a3a3a3;
+  --line: #2a2a2a;
+  --plate: #f4f4f2;
+  --plate-dark: #d4d4d0;
+  --onplate: #111111;
+  --sale: #fb923c;
+  --amber: #fbbf24;
+  --danger: #f87171;
+  --dark: #0a0a0a;
+  --dark-2: #161616;
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-plate: var(--plate);
+  --color-plate-dark: var(--plate-dark);
+  --color-onplate: var(--onplate);
+  --color-amber: var(--amber);
+  --color-danger: var(--danger);
+  --color-sale: var(--sale);
+  --color-dark: var(--dark);
+  --color-dark-2: var(--dark-2);
+  --color-on-dark: var(--on-dark);
+  --color-on-dark-soft: var(--on-dark-soft);
+}
+
+@theme {
+  --color-iron: #181715;
+  --color-chalk: #faf9f5;
+  --color-plate-blue: #5db8a6;
+  --color-plate-yellow: #e8a55a;
+  --color-plate-green: #5db872;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", "EB Garamond", Georgia, serif;
+}
+
+/* Barra de rolagem e toque seguem o tema */
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) var(--ground);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Títulos: serifa, peso leve, espaçamento negativo */
+.font-display {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
 body {
-  @apply bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300;
+  @apply bg-ground text-ink antialiased transition-colors duration-300;
+}
+
+:focus-visible {
+  outline: 2px solid var(--plate);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

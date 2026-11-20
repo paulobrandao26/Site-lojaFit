@@ -1,6 +1,7 @@
 import type { Produto } from '../types';
 
-const API_URL = 'https://loja-fit-worker.paulobrandaohbb.workers.dev'
+// Em dev, use VITE_API_URL (ex.: http://localhost:8787). Sem ela, usa o Worker de produção.
+const API_URL = import.meta.env.VITE_API_URL ?? 'https://loja-fit-worker.paulobrandaohbb.workers.dev'
 
 function comImagemLocal(produto: Produto): Produto {
   const nome = produto.nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')

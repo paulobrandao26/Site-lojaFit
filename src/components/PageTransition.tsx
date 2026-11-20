@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface PageTransitionProps {
@@ -7,6 +8,11 @@ interface PageTransitionProps {
 
 export function PageTransition({ children }: PageTransitionProps) {
   const location = useLocation();
+
+  // Toda página nova abre no topo
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait">

@@ -11,7 +11,7 @@ interface ProductCardProps {
 
 export function ProductCard({ produto, aoAdicionarCarrinho }: ProductCardProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const temPromocao = produto.precoPromocional !== undefined
+  const temPromocao = produto.precoPromocional != null
   const desconto = temPromocao ? Math.round((1 - produto.precoPromocional! / produto.preco) * 100) : 0
 
   // Motion values para o efeito 3D
@@ -68,14 +68,14 @@ export function ProductCard({ produto, aoAdicionarCarrinho }: ProductCardProps) 
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: 'spring', delay: 0.2 }}
-            className="absolute left-3 top-3 z-10 rounded-full bg-gradient-to-r from-[#d9a322] to-[#a3ff5e] px-3 py-1 text-xs font-bold text-black shadow-lg"
+            className="absolute left-3 top-3 z-10 rounded-lg bg-plate px-3 py-1 text-xs font-bold text-onplate shadow-lg"
           >
             -{desconto}%
           </motion.span>
         )}
 
         {/* Imagem do produto */}
-        <div className="aspect-square overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+        <div className="aspect-square overflow-hidden bg-line">
           <motion.img
             whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.4 }}
@@ -95,14 +95,14 @@ export function ProductCard({ produto, aoAdicionarCarrinho }: ProductCardProps) 
             {produto.categoria}
           </span>
 
-          <h3 className="line-clamp-2 text-sm font-bold text-neutral-900 dark:text-white">
+          <h3 className="line-clamp-2 text-sm font-bold text-ink">
             {produto.nome}
           </h3>
 
           {produto.avaliacao && (
             <div className="flex items-center gap-1">
-              <Star className="h-3.5 w-3.5 fill-[#d9a322] text-[#d9a322]" />
-              <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400">
+              <Star className="h-3.5 w-3.5 fill-plate text-plate" />
+              <span className="text-xs font-medium text-muted">
                 {produto.avaliacao}
               </span>
             </div>
@@ -116,7 +116,7 @@ export function ProductCard({ produto, aoAdicionarCarrinho }: ProductCardProps) 
                   R$ {produto.preco.toFixed(2)}
                 </span>
               )}
-              <span className="bg-gradient-to-r from-[#d9a322] to-[#a3ff5e] bg-clip-text text-lg font-extrabold text-transparent">
+              <span className="bg-plate bg-clip-text text-lg font-extrabold text-transparent">
                 R$ {(produto.precoPromocional ?? produto.preco).toFixed(2)}
               </span>
             </div>
@@ -125,7 +125,7 @@ export function ProductCard({ produto, aoAdicionarCarrinho }: ProductCardProps) 
               whileHover={{ scale: 1.1, rotate: 15 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleAdicionarCarrinho}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-[#d9a322] to-[#a3ff5e] text-black shadow-lg transition-shadow hover:shadow-xl"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-plate text-onplate shadow-lg transition-shadow hover:shadow-xl"
               aria-label={`Adicionar ${produto.nome} ao carrinho`}
               style={{ transform: 'translateZ(50px)' }}
             >

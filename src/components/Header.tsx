@@ -1,170 +1,127 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, Moon, ShoppingCart, Sun, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Lock, Menu, Moon, ShoppingBag, Sun, X } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useCarrinho } from '../context/CarrinhoContext';
 import { useTema } from '../context/TemaContext';
 
+const LINKS = [
+  { to: '/produtos', texto: 'Todos' },
+  { to: '/produtos?categoria=suplementos', texto: 'Suplementos' },
+  { to: '/produtos?categoria=acessorios', texto: 'Acessórios' },
+  { to: '/produtos?categoria=vestuario', texto: 'Vestuário' },
+  { to: '/afiliados', texto: 'Seja afiliado' },
+]
+
+export function Logo() {
+  return (
+    <span className="flex items-center gap-2 text-xl font-bold tracking-tight text-ink" translate="no">
+      <span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-full bg-ink">
+        <span className="h-2 w-2 rounded-full bg-ground" />
+      </span>
+      Loja Fit
+    </span>
+  )
+}
+
 export function Header() {
   const [menuAberto, setMenuAberto] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const { totalItens } = useCarrinho()
   const { tema, alternarTema } = useTema()
-
-  // Detecta scroll para mudar o header
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const { pathname, search } = useLocation()
+  const atual = pathname + search
 
   return (
     <>
-      <motion.header 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-          scrolled 
-            ? 'border-b border-white/10 bg-black/80 backdrop-blur-xl' 
-            : 'bg-transparent'
-        }`}
-      >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-          {/* Logo */}
-          <Link to="/" className="group relative">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="text-2xl font-extrabold"
-            >
-              <span className="text-white">LOJA</span>
-              <span className="bg-gradient-to-r from-[#d9a322] to-[#a3ff5e] bg-clip-text text-transparent">FIT</span>
-            </motion.div>
+      {/* Faixa de aviso (fato real da loja) */}
+      <div className="bg-dark text-on-dark">
+        <p className="mx-auto flex h-9 max-w-[1280px] items-center justify-center gap-2 px-6 text-[13px] font-medium">
+          <Lock aria-hidden="true" className="h-3.5 w-3.5" /> Pagamento seguro pela Stripe<span className="hidden sm:inline"> · compre sem criar conta</span>
+        </p>
+      </div>
+
+      <header className="sticky top-0 z-50 border-b border-line bg-ground/95 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-6 px-6">
+          <Link to="/" aria-label="Loja Fit, página inicial">
+            <Logo />
           </Link>
 
-          {/* Menu desktop */}
-          <nav className="hidden items-center gap-8 lg:flex">
-            <NavLink to="/">Início</NavLink>
-            <NavLink to="/produtos">Produtos</NavLink>
-            <NavLink to="/afiliados">Seja Afiliado</NavLink>
+          <nav aria-label="Categorias" className="hidden items-center gap-1 lg:flex">
+            {LINKS.map((l) => {
+              const ativo = atual === l.to
+              return (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  aria-current={ativo ? 'page' : undefined}
+                  className={`relative px-3 py-2 text-[13px] font-semibold uppercase tracking-wide transition-colors ${
+                    ativo ? 'text-ink' : 'text-muted hover:text-ink'
+                  }`}
+                >
+                  {l.texto}
+                  {ativo && <span aria-hidden="true" className="absolute inset-x-3 -bottom-[13px] h-0.5 bg-ink" />}
+                </Link>
+              )
+            })}
           </nav>
 
-          {/* Ações */}
-          <div className="flex items-center gap-2">
-            {/* Tema */}
-            <motion.button
-              whileHover={{ scale: 1.1, rotate: 180 }}
-              whileTap={{ scale: 0.9 }}
+          <div className="flex items-center gap-1">
+            <button
               onClick={alternarTema}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10"
-              aria-label="Alternar tema"
+              className="grid h-11 w-11 place-items-center rounded-full text-ink transition-colors hover:bg-surface"
+              aria-label={tema === 'claro' ? 'Ativar tema escuro' : 'Ativar tema claro'}
             >
               {tema === 'claro' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-            </motion.button>
+            </button>
 
-            {/* Carrinho */}
-            <Link to="/carrinho">
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="relative flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-white/10"
-              >
-                <ShoppingCart className="h-5 w-5 text-white" />
-                {totalItens > 0 && (
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#d9a322] text-[10px] font-bold text-black"
-                  >
-                    {totalItens}
-                  </motion.span>
-                )}
-              </motion.div>
+            <Link
+              to="/carrinho"
+              className="relative grid h-11 w-11 place-items-center rounded-full text-ink transition-colors hover:bg-surface"
+              aria-label={`Carrinho, ${totalItens} ${totalItens === 1 ? 'item' : 'itens'}`}
+            >
+              <ShoppingBag className="h-5 w-5" />
+              {totalItens > 0 && (
+                <span className="absolute right-1 top-1 grid h-5 min-w-5 place-items-center rounded-full bg-sale px-1 text-[11px] font-bold text-white">
+                  {totalItens}
+                </span>
+              )}
             </Link>
 
-            {/* Menu mobile */}
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className="flex h-10 w-10 items-center justify-center lg:hidden"
+            <button
+              className="grid h-11 w-11 place-items-center rounded-full text-ink lg:hidden"
               onClick={() => setMenuAberto(!menuAberto)}
-              aria-label="Menu"
+              aria-label={menuAberto ? 'Fechar menu' : 'Abrir menu'}
+              aria-expanded={menuAberto}
             >
-              {menuAberto ? (
-                <X className="h-6 w-6 text-white" />
-              ) : (
-                <Menu className="h-6 w-6 text-white" />
-              )}
-            </motion.button>
+              {menuAberto ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
           </div>
         </div>
-      </motion.header>
 
-      {/* Menu Mobile Full Screen */}
-      <AnimatePresence>
-        {menuAberto && (
-          <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed inset-0 z-40 bg-black lg:hidden"
-          >
-            <div className="flex h-full flex-col items-center justify-center gap-8 p-8">
-              <MobileNavLink to="/" onClick={() => setMenuAberto(false)}>
-                Início
-              </MobileNavLink>
-              <MobileNavLink to="/produtos" onClick={() => setMenuAberto(false)}>
-                Produtos
-              </MobileNavLink>
-              <MobileNavLink to="/afiliados" onClick={() => setMenuAberto(false)}>
-                Seja Afiliado
-              </MobileNavLink>
-              
-              <div className="mt-8 h-px w-32 bg-white/20" />
-              
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-center text-sm text-gray-500"
-              >
-                © 2026 LojaFit
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {menuAberto && (
+            <motion.nav
+              aria-label="Categorias"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="border-t border-line bg-ground px-6 py-4 lg:hidden"
+            >
+              {LINKS.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setMenuAberto(false)}
+                  className="block border-b border-line py-4 text-base font-semibold text-ink last:border-0"
+                >
+                  {l.texto}
+                </Link>
+              ))}
+            </motion.nav>
+          )}
+        </AnimatePresence>
+      </header>
     </>
-  )
-}
-
-// Componente NavLink para desktop
-function NavLink({ to, children }: { to: string; children: string }) {
-  return (
-    <Link to={to} className="group relative text-sm font-medium text-white transition-colors">
-      <span className="relative z-10">{children}</span>
-      <motion.span
-        className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-[#d9a322] to-[#a3ff5e] opacity-0 transition-opacity group-hover:opacity-100"
-        initial={false}
-      />
-    </Link>
-  )
-}
-
-// Componente NavLink para mobile
-function MobileNavLink({ to, onClick, children }: { to: string; onClick: () => void; children: string }) {
-  return (
-    <Link to={to} onClick={onClick}>
-      <motion.div
-        whileHover={{ scale: 1.05, x: 10 }}
-        whileTap={{ scale: 0.95 }}
-        className="text-4xl font-bold text-white transition-colors hover:bg-gradient-to-r hover:from-[#d9a322] hover:to-[#a3ff5e] hover:bg-clip-text hover:text-transparent"
-      >
-        {children}
-      </motion.div>
-    </Link>
   )
 }
