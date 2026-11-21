@@ -63,7 +63,7 @@ export function Afiliados() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <h2 className="text-center text-sm font-bold uppercase tracking-wide text-muted">
+            <h2 className="text-center text-sm font-rotulo text-muted">
               Quero ser afiliado
             </h2>
             <input

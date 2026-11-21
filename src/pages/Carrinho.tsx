@@ -12,7 +12,7 @@ export function Carrinho() {
     return (
       <div className="flex min-h-[70vh] flex-col items-center justify-center gap-4 bg-ground px-6 text-center">
         <ShoppingBag className="h-14 w-14 text-muted" />
-        <h1 className="font-display text-2xl text-ink">Seu carrinho está vazio</h1>
+        <h1 className="font-display text-3xl text-ink sm:text-4xl">Seu carrinho <span className="texto-contorno">está vazio</span></h1>
         <p className="text-muted">Escolha um produto para começar.</p>
         <Link to="/produtos" className="mt-2 rounded-lg bg-plate px-8 py-4 font-bold text-onplate hover:bg-plate-dark">
           Ver produtos
@@ -25,7 +25,7 @@ export function Carrinho() {
     <div className="min-h-screen bg-ground pb-36 lg:pb-16">
       <div className="mx-auto max-w-5xl px-6 py-10">
         <Etapas atual={1} />
-        <h1 className="font-display mb-6 text-4xl text-ink">Seu carrinho</h1>
+        <h1 className="font-display mb-8 text-[clamp(2.25rem,10.5vw,3.75rem)] text-ink">Seu <span className="bloco-destaque">carrinho</span></h1>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
           <ul className="flex flex-col divide-y divide-line rounded-xl bg-surface">

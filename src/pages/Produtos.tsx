@@ -60,8 +60,10 @@ export function Produtos() {
       <section className="border-b border-line px-6 pb-10 pt-12">
         <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-6">
           <div>
-            <h1 className="font-display text-5xl leading-none text-ink sm:text-6xl">Produtos</h1>
-            <p className="mt-3 max-w-xl text-muted">
+            <h1 className="font-display text-[clamp(2.25rem,10.5vw,6rem)] text-ink">
+              <span className="bloco-destaque">Produtos</span>
+            </h1>
+            <p className="mt-4 max-w-xl text-muted">
               Suplementos, acessórios e roupas de treino.
             </p>
           </div>

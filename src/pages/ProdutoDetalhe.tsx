@@ -89,7 +89,7 @@ export function ProdutoDetalhe() {
               <span aria-hidden="true" className={`h-3 w-3 rounded-full ${infoCategoria(produto.categoria).cor}`} />
               {infoCategoria(produto.categoria).nome}
             </span>
-            <h1 className="font-display mt-2 text-4xl leading-tight text-ink">{produto.nome}</h1>
+            <h1 className="font-display mt-3 text-balance text-3xl leading-[1.02] text-ink sm:text-4xl">{produto.nome}</h1>
 
             {produto.avaliacao != null && (
               <span className="mt-2 flex items-center gap-1 text-sm text-muted">

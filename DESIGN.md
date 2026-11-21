@@ -5,7 +5,7 @@ Inspirado no estilo, sem copiar código, textos, fotos ou marca de ninguém. Nom
 
 ## Ideia
 Vitrine estática e direta: foto grande no topo, faixa de vantagens, grade de produtos com fotos altas e categorias com foto.
-Quase sem efeitos: só zoom leve na foto ao passar o mouse e transição de cor nos botões.
+Títulos fortes e largos dão a personalidade. Efeitos poucos: entrada do título do hero, zoom leve na foto ao passar o mouse e transição de cor nos botões.
 
 ## Cores
 | Token | Claro (padrão) | Escuro | Uso |
@@ -20,7 +20,13 @@ Quase sem efeitos: só zoom leve na foto ao passar o mouse e transição de cor 
 | `danger` | `#b42318` | `#f87171` | só erros |
 
 ## Tipografia
-- **Inter** em tudo. Títulos 600, `letter-spacing: -0.02em`. Menu e selos 13px.
+- **Archivo** (larga, `wdth 125`, peso 800, caixa alta) nos títulos: classe `.font-display`.
+- `.texto-contorno`: parte do título só com contorno (`-webkit-text-stroke`).
+- `.bloco-destaque`: parte do título dentro de um bloco inclinado (-12°), cor `ink` com texto `ground` (invertido no tema escuro).
+- `.marca`: logo "LOJA" + bloco "FIT", Archivo 900 itálica.
+- `.font-rotulo`: Archivo 700, `wdth 112`, caixa alta para menu e botões.
+- **Inter** no corpo do texto, preços e formulários.
+- Um efeito por título no máximo (contorno **ou** bloco).
 
 ## Layout
 - Faixa de aviso no topo (fundo preto) com um fato real da loja.

@@ -155,7 +155,7 @@ export function Checkout() {
     <div className="min-h-screen bg-ground pb-36 lg:pb-16">
       <div className="mx-auto max-w-5xl px-6 py-10">
         <Etapas atual={2} />
-        <h1 className="font-display mb-6 text-4xl text-ink">Entrega</h1>
+        <h1 className="font-display mb-8 text-[clamp(2.25rem,10.5vw,3.75rem)] text-ink"><span className="bloco-destaque">Entrega</span></h1>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
           <form
@@ -221,7 +221,7 @@ export function Checkout() {
           {/* Resumo + ação principal; no celular fica embaixo, perto do dedo */}
           <aside className="lg:self-start">
             <div className="rounded-xl bg-surface p-5">
-              <h2 className="mb-3 text-lg font-bold text-ink">Resumo</h2>
+              <h2 className="font-display mb-4 text-2xl text-ink">Resumo</h2>
               <ul className="space-y-2 text-sm">
                 {itens.map((item) => (
                   <li key={item.produto.id} className="flex justify-between gap-3">

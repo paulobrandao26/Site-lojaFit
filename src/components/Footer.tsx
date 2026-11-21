@@ -30,8 +30,8 @@ export function Footer() {
           className="mb-16 grid gap-8 border-b border-white/10 pb-16 lg:grid-cols-2 lg:items-center"
         >
           <div>
-            <h3 className="font-display mb-2 text-4xl text-white">
-              Fique por dentro
+            <h3 className="font-display mb-3 text-4xl text-white [--contorno:#fff]">
+              Fique <span className="texto-contorno">por dentro</span>
             </h3>
             <p className="text-gray-400">
               Receba ofertas exclusivas, dicas de treino e lançamentos direto no seu e-mail.
@@ -73,7 +73,7 @@ export function Footer() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <Link to="/" className="mb-4 inline-block text-2xl font-extrabold">
-              <span className="font-display flex items-center gap-2 text-2xl text-white"><span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-full bg-white"><span className="h-2 w-2 rounded-full bg-iron" /></span>Loja Fit</span>
+              <span className="marca text-2xl text-white [--bloco-fundo:#fff] [--bloco-texto:#111]" translate="no">Loja <span className="bloco-destaque">Fit</span></span>
             </Link>
             <p className="mb-6 text-sm leading-relaxed text-gray-400">
               Suplementos premium desenvolvidos para quem busca resultados reais. Qualidade superior em cada pote.

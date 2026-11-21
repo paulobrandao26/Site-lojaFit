@@ -13,13 +13,10 @@ const LINKS = [
   { to: '/afiliados', texto: 'Seja afiliado' },
 ]
 
-export function Logo() {
+export function Logo({ tamanho = 'text-[22px]' }: { tamanho?: string }) {
   return (
-    <span className="flex items-center gap-2 text-xl font-bold tracking-tight text-ink" translate="no">
-      <span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-full bg-ink">
-        <span className="h-2 w-2 rounded-full bg-ground" />
-      </span>
-      Loja Fit
+    <span className={`marca ${tamanho} text-ink`} translate="no">
+      Loja <span className="bloco-destaque">Fit</span>
     </span>
   )
 }
@@ -35,13 +32,13 @@ export function Header() {
     <>
       {/* Faixa de aviso (fato real da loja) */}
       <div className="bg-dark text-on-dark">
-        <p className="mx-auto flex h-9 max-w-[1280px] items-center justify-center gap-2 px-6 text-[13px] font-medium">
+        <p className="font-rotulo mx-auto flex h-9 max-w-[1280px] items-center justify-center gap-2 px-6 text-[12px]">
           <Lock aria-hidden="true" className="h-3.5 w-3.5" /> Pagamento seguro pela Stripe<span className="hidden sm:inline"> · compre sem criar conta</span>
         </p>
       </div>
 
       <header className="sticky top-0 z-50 border-b border-line bg-ground/95 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-6 px-6">
+        <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between gap-6 px-6">
           <Link to="/" aria-label="Loja Fit, página inicial">
             <Logo />
           </Link>
@@ -54,12 +51,12 @@ export function Header() {
                   key={l.to}
                   to={l.to}
                   aria-current={ativo ? 'page' : undefined}
-                  className={`relative px-3 py-2 text-[13px] font-semibold uppercase tracking-wide transition-colors ${
+                  className={`font-rotulo relative px-3 py-2 text-[13px] transition-colors ${
                     ativo ? 'text-ink' : 'text-muted hover:text-ink'
                   }`}
                 >
                   {l.texto}
-                  {ativo && <span aria-hidden="true" className="absolute inset-x-3 -bottom-[13px] h-0.5 bg-ink" />}
+                  {ativo && <span aria-hidden="true" className="absolute inset-x-3 -bottom-[17px] h-1 -skew-x-12 bg-ink" />}
                 </Link>
               )
             })}
@@ -113,7 +110,7 @@ export function Header() {
                   key={l.to}
                   to={l.to}
                   onClick={() => setMenuAberto(false)}
-                  className="block border-b border-line py-4 text-base font-semibold text-ink last:border-0"
+                  className="font-rotulo block border-b border-line py-4 text-lg text-ink last:border-0"
                 >
                   {l.texto}
                 </Link>

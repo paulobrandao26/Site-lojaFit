@@ -91,7 +91,7 @@ export function ProductCard({ produto, aoAdicionarCarrinho }: ProductCardProps) 
 
         {/* Conteúdo */}
         <div className="flex flex-1 flex-col gap-2 p-4" style={{ transform: 'translateZ(30px)' }}>
-          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+          <span className="text-xs font-rotulor text-neutral-400 dark:text-neutral-500">
             {produto.categoria}
           </span>
 

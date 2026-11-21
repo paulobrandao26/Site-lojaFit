@@ -28,7 +28,7 @@ export function PedidoConfirmado() {
           <Check className="h-12 w-12 text-white" strokeWidth={3} />
         </motion.div>
 
-        <h1 className="font-display mt-6 text-4xl text-ink">Pedido confirmado</h1>
+        <h1 className="font-display mt-6 text-4xl text-ink sm:text-5xl">Pedido <span className="bloco-destaque">confirmado</span></h1>
         <p className="mt-3 text-muted">Pagamento aprovado. Agora é com a gente: vamos separar seus produtos.</p>
 
         {pedidoId && (
